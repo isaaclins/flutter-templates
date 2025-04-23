@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 /// for login and registration screens
 class UIConfig {
   // Form validation parameters
-  static final int passwordMinimalLength =
-      12; // TODO: Customize minimum password length requirement
-  static final RegExp emailRegex = RegExp(
-    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-  ); // TODO: Customize email validation regex
+  static final int passwordMinimalLength = 12;
+  static final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
   // UI Customization - Sizes
   static final double iconSize = 100.0;
@@ -26,8 +23,7 @@ class UIConfig {
   static final Color errorColor = Colors.red.shade700;
   static final Color successColor = Colors.green.shade600;
   static final Color buttonTextColor = Colors.white;
-  static final Color linkTextColor =
-      Colors.purple; // TODO: Customize color of login/register link text
+  static final Color linkTextColor = Colors.purple;
 
   // Login screen text content
   static final String loginAppBarTitle = 'Login';
