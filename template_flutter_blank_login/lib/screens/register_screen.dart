@@ -204,7 +204,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text(UIConfig.registerLoginLinkText),
+                  child: Text(
+                    UIConfig.registerLoginLinkText,
+                    style: TextStyle(color: UIConfig.linkTextColor),
+                  ),
                 ),
               ],
             ),

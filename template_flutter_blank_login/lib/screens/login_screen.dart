@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             UIConfig.loginButtonText,
                             style: TextStyle(
                               fontSize: UIConfig.buttonFontSize,
-                              color: UIConfig.buttonTextColor,                              
+                              color: UIConfig.buttonTextColor,
                             ),
                           ),
                 ),
@@ -151,7 +151,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     );
                   },
-                  child: Text(UIConfig.loginRegisterLinkText),
+                  child: Text(
+                    UIConfig.loginRegisterLinkText,
+                    style: TextStyle(color: UIConfig.linkTextColor),
+                  ),
                 ),
               ],
             ),
