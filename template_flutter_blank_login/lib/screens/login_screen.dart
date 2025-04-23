@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../services/ui_config.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -10,6 +11,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // Form controllers and state
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -35,17 +37,15 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Login successful! Check console for details.'),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(UIConfig.loginSuccessMessage)));
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Login failed: $e')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('${UIConfig.loginFailureMessage}$e')),
+          );
         }
       } finally {
         if (mounted) {
@@ -60,60 +60,88 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: Text(UIConfig.loginAppBarTitle)),
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(UIConfig.formPadding),
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Icon(Icons.account_circle, size: 100, color: Colors.blue),
-                const SizedBox(height: 32),
+                Icon(
+                  UIConfig.loginHeaderIcon,
+                  size: UIConfig.iconSize,
+                  color: UIConfig.primaryColor,
+                ),
+                SizedBox(height: UIConfig.headerSpacing),
                 TextFormField(
                   controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Username or Email',
-                    prefixIcon: Icon(Icons.person),
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: UIConfig.loginUsernameLabel,
+                    prefixIcon: Icon(UIConfig.usernameIcon),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        UIConfig.borderRadius,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.all(UIConfig.fieldPadding),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your username or email';
+                      return UIConfig.emptyUsernameError;
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: UIConfig.verticalSpacing),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: UIConfig.loginPasswordLabel,
+                    prefixIcon: Icon(UIConfig.passwordIcon),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        UIConfig.borderRadius,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.all(UIConfig.fieldPadding),
                   ),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
+                      return UIConfig.emptyPasswordError;
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: UIConfig.verticalSpacing * 1.5),
                 ElevatedButton(
                   onPressed: _isLoading ? null : _login,
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: EdgeInsets.symmetric(
+                      vertical: UIConfig.buttonVerticalPadding,
+                    ),
+                    backgroundColor: UIConfig.primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        UIConfig.borderRadius,
+                      ),
+                    ),
                   ),
                   child:
                       _isLoading
                           ? const CircularProgressIndicator()
-                          : const Text('LOGIN', style: TextStyle(fontSize: 16)),
+                          : Text(
+                            UIConfig.loginButtonText,
+                            style: TextStyle(
+                              fontSize: UIConfig.buttonFontSize,
+                              color: UIConfig.buttonTextColor,                              
+                            ),
+                          ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: UIConfig.verticalSpacing),
                 TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -123,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     );
                   },
-                  child: const Text('Don\'t have an account? Register'),
+                  child: Text(UIConfig.loginRegisterLinkText),
                 ),
               ],
             ),

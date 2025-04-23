@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../services/ui_config.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -9,7 +10,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _passwordMinimalLength = 12;
+  // Form controllers and state
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -41,20 +42,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Registration successful! Check console for details.',
-              ),
-            ),
+            SnackBar(content: Text(UIConfig.registerSuccessMessage)),
           );
           // Navigate back to login screen after successful registration
           Navigator.pop(context);
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Registration failed: $e')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('${UIConfig.registerFailureMessage}$e')),
+          );
         }
       } finally {
         if (mounted) {
@@ -69,116 +66,145 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Register')),
+      appBar: AppBar(title: Text(UIConfig.registerAppBarTitle)),
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(UIConfig.formPadding),
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Icon(
-                  Icons.app_registration,
-                  size: 100,
-                  color: Colors.blue,
+                Icon(
+                  UIConfig.registerHeaderIcon,
+                  size: UIConfig.iconSize,
+                  color: UIConfig.primaryColor,
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: UIConfig.headerSpacing),
                 TextFormField(
                   controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                    prefixIcon: Icon(Icons.person),
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: UIConfig.registerUsernameLabel,
+                    prefixIcon: Icon(UIConfig.usernameIcon),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        UIConfig.borderRadius,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.all(UIConfig.fieldPadding),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a username';
+                      return UIConfig.emptyUsernameError;
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: UIConfig.verticalSpacing),
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: UIConfig.registerEmailLabel,
+                    prefixIcon: Icon(UIConfig.emailIcon),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        UIConfig.borderRadius,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.all(UIConfig.fieldPadding),
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter an email';
+                      return UIConfig.emptyEmailError;
                     }
-                    if (!RegExp(
-                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                    ).hasMatch(value)) {
-                      return 'Please enter a valid email';
+                    if (!UIConfig.emailRegex.hasMatch(value)) {
+                      return UIConfig.invalidEmailError;
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: UIConfig.verticalSpacing),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: UIConfig.registerPasswordLabel,
+                    prefixIcon: Icon(UIConfig.passwordIcon),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        UIConfig.borderRadius,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.all(UIConfig.fieldPadding),
                   ),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a password';
+                      return UIConfig.emptyPasswordError;
                     }
                     // TODO: Add custom password strength validation
-                    if (value.length < _passwordMinimalLength) {
-                      return 'Password must be at least $_passwordMinimalLength characters!';
+                    if (value.length < UIConfig.passwordMinimalLength) {
+                      return UIConfig.passwordLengthError;
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: UIConfig.verticalSpacing),
                 TextFormField(
                   controller: _confirmPasswordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Confirm Password',
-                    prefixIcon: Icon(Icons.lock_outline),
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: UIConfig.registerConfirmPasswordLabel,
+                    prefixIcon: Icon(UIConfig.confirmPasswordIcon),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        UIConfig.borderRadius,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.all(UIConfig.fieldPadding),
                   ),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please confirm your password';
+                      return UIConfig.emptyConfirmPasswordError;
                     }
                     if (value != _passwordController.text) {
-                      return 'Passwords do not match';
+                      return UIConfig.passwordMatchError;
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: UIConfig.verticalSpacing * 1.5),
                 ElevatedButton(
                   onPressed: _isLoading ? null : _register,
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: EdgeInsets.symmetric(
+                      vertical: UIConfig.buttonVerticalPadding,
+                    ),
+                    backgroundColor: UIConfig.primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        UIConfig.borderRadius,
+                      ),
+                    ),
                   ),
                   child:
                       _isLoading
                           ? const CircularProgressIndicator()
-                          : const Text(
-                            'REGISTER',
-                            style: TextStyle(fontSize: 16),
+                          : Text(
+                            UIConfig.registerButtonText,
+                            style: TextStyle(
+                              fontSize: UIConfig.buttonFontSize,
+                              color: UIConfig.buttonTextColor,
+                            ),
                           ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: UIConfig.verticalSpacing),
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('Already have an account? Login'),
+                  child: Text(UIConfig.registerLoginLinkText),
                 ),
               ],
             ),
