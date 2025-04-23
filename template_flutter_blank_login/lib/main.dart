@@ -9,10 +9,8 @@ class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   // App configuration
-  static const String _appTitle =
-      'Flutter Login Template'; // TODO: Customize app title
-  static const MaterialColor _primaryColor =
-      Colors.blue; // TODO: Customize primary color theme
+  static const String _appTitle = 'Flutter Login Template';
+  static const MaterialColor _primaryColor = Colors.blue;
 
   @override
   Widget build(BuildContext context) {
